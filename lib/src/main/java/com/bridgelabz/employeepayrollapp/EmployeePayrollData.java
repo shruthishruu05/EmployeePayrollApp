@@ -5,7 +5,7 @@ public class EmployeePayrollData {
 	String employeeName;
 	double employeeSalary;
 	
-	public EmployeePayrollData(int employeeId, String employeeName, double employeeSalary) {
+	public EmployeePayrollData(int employeeId, String employeeName, Double employeeSalary) {
 		super();
 		this.employeeId = employeeId;
 		this.employeeName = employeeName;
