@@ -48,7 +48,16 @@ public class EmployeePayrollService {
 		
 		return 0;
 	}
-	
+	public long readDataFromFile(IOService fileIo) {
+			
+			List<String> employeePayrollFromFile = new ArrayList<String>();
+			if(fileIo.equals(IOService.FILE_IO)) {
+				System.out.println("Employee Details from payroll-file.txt");
+				employeePayrollFromFile = new EmployeePayrollFileIOService().readDataFromFile();
+				
+			}
+			return employeePayrollFromFile.size();
+		}
 	public static void main(String [] args)
 	{
 		System.out.println("Welcome to employee payroll application");
