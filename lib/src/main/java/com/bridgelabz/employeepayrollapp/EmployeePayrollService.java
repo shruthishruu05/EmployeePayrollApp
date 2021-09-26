@@ -1,8 +1,12 @@
 package com.bridgelabz.employeepayrollapp;
 
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+
+import com.mysql.jdbc.Connection;
 
 public class EmployeePayrollService {
 	
@@ -70,5 +74,28 @@ public class EmployeePayrollService {
 		
 	
 	}
+
+	public List<EmployeePayrollData> readEmployeePayrollData(IOService dbIo) {
+		try {
+			if(dbIo.equals(IOService.DB_IO))
+				this.employeePayrollList = new EmployeePayrollDBService().readData();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		    return this.employeePayrollList;
+			
+	}
+
+	public void updateEmployeeSalary(String name, double salary) {
+		try {
+			int result = new EmployeePayrollDBService().updateEmployeeSalary(name, salary);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+
 	
 }
