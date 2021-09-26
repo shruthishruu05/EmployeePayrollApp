@@ -26,3 +26,8 @@ dependencies {
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:29.0-jre'
 }
+
+dependencies {
+	 
+	 implementation group: 'mysql', name: 'mysql-connector-java', version: '5.1.6'
+	 }
