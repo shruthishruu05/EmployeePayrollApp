@@ -148,4 +148,43 @@ public class EmployeePayrollService {
 			this.employeePayrollList = employeePayrollDBService.getEmployeeDetailsBasedOnStartDateUsingPreparedStatement(startDate);
 		return this.employeePayrollList;
 	}
+public List<Double> getSumOfSalaryBasedOnGender(IOService ioService) {
+		
+		List<Double> sumOfSalaryBasedOnGender = new ArrayList<Double>();
+		if(ioService.equals(IOService.DB_IO))
+			sumOfSalaryBasedOnGender = employeePayrollDBService.getSumOfSalaryBasedOnGenderUsingStatement();
+		return sumOfSalaryBasedOnGender;	
+	}
+
+	public List<Double> getAverageOfSalaryBasedOnGender(IOService ioService) {
+		
+		List<Double> averageOfSalaryBasedOnGender = new ArrayList<Double>();
+		if(ioService.equals(IOService.DB_IO))
+			averageOfSalaryBasedOnGender = employeePayrollDBService.getAverageOfSalaryBasedOnGenderUsingStatement();
+		return averageOfSalaryBasedOnGender;
+	}
+
+	public List<Double> getMinimumSalaryBasedOnGender(IOService ioService) {
+		
+		List<Double> minimumSalaryBasedOnGender = new ArrayList<Double>();
+		if(ioService.equals(IOService.DB_IO))
+			minimumSalaryBasedOnGender = employeePayrollDBService.getMinimumSalaryBasedOnGenderUsingStatement();
+		return minimumSalaryBasedOnGender;
+	}
+	
+	public List<Double> getMaximumSalaryBasedOnGender(IOService ioService) {
+		
+		List<Double> maximumSalaryBasedOnGender = new ArrayList<Double>();
+		if(ioService.equals(IOService.DB_IO))
+			maximumSalaryBasedOnGender = employeePayrollDBService.getMaximumSalaryBasedOnGenderUsingStatement();
+		return maximumSalaryBasedOnGender;
+	}
+	public List<Integer> getCountOfEmployeesBasedOnGender(IOService ioService) {
+		
+		List<Integer> countBasedOnGender = new ArrayList<Integer>();
+		if(ioService.equals(IOService.DB_IO))
+			countBasedOnGender = employeePayrollDBService.getCountOfEmployeesBasedOnGenderUsingStatement();
+		return countBasedOnGender;
+	}
+
 }
