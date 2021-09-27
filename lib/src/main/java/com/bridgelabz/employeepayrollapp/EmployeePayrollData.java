@@ -8,7 +8,6 @@ public class EmployeePayrollData {
 	double employeeSalary;
 	private LocalDate startDate;
 	
-	
 	public EmployeePayrollData(int employeeId, String employeeName, Double employeeSalary) {
 		super();
 		this.employeeId = employeeId;
