@@ -2,6 +2,7 @@ package com.bridgelabz.employeepayrollapp;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -69,5 +70,70 @@ public class EmployeePayrollServiceTest
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService.getEmployeeDetailsBasedOnStartDate(IOService.DB_IO, startDate);
 		Assert.assertEquals(3, employeePayrollData.size());
+	}
+	@Test
+	public void givenEmployeePayrollInDB_ShouldReturnSumOfSalaryBasedOnGender() {
+		
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		List<Double> expectedSalarySum = new ArrayList();
+		expectedSalarySum.add(8000000.00);
+		expectedSalarySum.add(3000000.00);
+		List<Double> sumOfSalaryBasedOnGender = employeePayrollService.getSumOfSalaryBasedOnGender(IOService.DB_IO);
+		if(sumOfSalaryBasedOnGender.size() == 2) {
+			Assert.assertEquals(expectedSalarySum, sumOfSalaryBasedOnGender);
+		}
+		
+	}
+	
+	@Test
+	public void givenEmployeePayrollInDB_ShouldReturnAverageOfSalaryBasedOnGender() {
+		
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		List<Double> expectedSalaryAverage = new ArrayList();
+		expectedSalaryAverage.add(8000000.00);
+		expectedSalaryAverage.add(1500000.00);
+		List<Double> averageOfSalaryBasedOnGender = employeePayrollService.getAverageOfSalaryBasedOnGender(IOService.DB_IO);
+		if(averageOfSalaryBasedOnGender.size() == 2) {
+			Assert.assertEquals(expectedSalaryAverage, averageOfSalaryBasedOnGender);
+		}
+	}
+	
+	@Test
+	public void givenEmployeePayrollInDB_ShouldReturnMinimumSalaryBasedOnGender() {
+		
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		List<Double> expectedMinimumSalary = new ArrayList();
+		expectedMinimumSalary.add(8000000.00);
+		expectedMinimumSalary.add(1000000.00);
+		List<Double> minimumSalaryBasedOnGender = employeePayrollService.getMinimumSalaryBasedOnGender(IOService.DB_IO);
+		if(minimumSalaryBasedOnGender.size() == 2) {
+			Assert.assertEquals(expectedMinimumSalary, minimumSalaryBasedOnGender);
+		}
+	}
+	
+	@Test
+	public void givenEmployeePayrollInDB_ShouldReturnMaximumSalaryBasedOnGender() {
+		
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		List<Double> expectedMaximumSalary = new ArrayList();
+		expectedMaximumSalary.add(8000000.00);
+		expectedMaximumSalary.add(2000000.00);
+		List<Double> maximumSalaryBasedOnGender = employeePayrollService.getMaximumSalaryBasedOnGender(IOService.DB_IO);
+		if(maximumSalaryBasedOnGender.size() == 2) {
+			Assert.assertEquals(expectedMaximumSalary, maximumSalaryBasedOnGender);
+		}
+	}
+	
+	@Test
+	public void givenEmployeePayrollInDB_ShouldReturnCountOfBasedOnGender() {
+		
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		List<Integer> expectedCountBasedOnGender = new ArrayList();
+		expectedCountBasedOnGender.add(1);
+		expectedCountBasedOnGender.add(2);
+		List<Integer> countBasedOnGender = employeePayrollService.getCountOfEmployeesBasedOnGender(IOService.DB_IO);
+		if(countBasedOnGender.size() == 2) {
+			Assert.assertEquals(expectedCountBasedOnGender, countBasedOnGender);
+		}
 	}
 }
