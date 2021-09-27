@@ -8,9 +8,53 @@ import com.mysql.jdbc.Connection;
 import java.sql.*;
 
 public class EmployeePayrollDBService {
+	
+	private PreparedStatement employeePayrollDataStatement;
+	private static EmployeePayrollDBService employeePayrollDBService;
+	
+	public static EmployeePayrollDBService getInstance() {
+		if(employeePayrollDBService == null)
+			employeePayrollDBService = new EmployeePayrollDBService();
+		return employeePayrollDBService;
+	}
+	
+private List<EmployeePayrollData> getEmployeePayrollData(ResultSet resultSet) {
+		
+		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
+		
+		try {
+			while(resultSet.next()) {
+				int id = resultSet.getInt("id");
+				String name = resultSet.getString("name");
+				double basicSalary = resultSet.getDouble("salary");
+				LocalDate startDate = resultSet.getDate("start").toLocalDate();
+				employeePayrollList.add(new EmployeePayrollData(id, name, basicSalary, startDate));
+			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return employeePayrollList;
+		
+	}
+	
+	public List<EmployeePayrollData> getEmployeePayrollData(String name) {
+		
+		List<EmployeePayrollData> employeePayrollList = null;
+		if(this.employeePayrollDataStatement == null)
+			this.prepareStatementForEmployeeData();
+		try {
+			employeePayrollDataStatement.setString(1,name);
+			ResultSet resultSet = employeePayrollDataStatement.executeQuery();
+			employeePayrollList = this.getEmployeePayrollData(resultSet);	
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return employeePayrollList;
+	}
 
 	
-
 	public List<EmployeePayrollData> readData() {
 		String sql = "SELECT * FROM employee_payroll"; 
 		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
@@ -51,7 +95,7 @@ public class EmployeePayrollDBService {
 		
 	}
 	
-	private int updateEmployeeDataUsingStatement(String name,double salary) throws SQLException {
+	int updateEmployeeDataUsingStatement(String name,double salary) throws SQLException {
 		String sqlString = String.format("update employee_payroll set salary = %2f where name = '%s';",salary,name);
 		try(Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
@@ -62,6 +106,32 @@ public class EmployeePayrollDBService {
 		}
 		return 0;
 		
+	}
+	private void prepareStatementForEmployeeData() {
+			
+			try {
+				Connection connection = this.getConnection();
+				String sqlStatement = "SELECT * FROM employee_payroll WHERE name = ?;";
+				employeePayrollDataStatement = connection.prepareStatement(sqlStatement);
+			}
+			catch(SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+	public List<EmployeePayrollData> getEmployeeDetailsBasedOnNameUsingStatement(String name) {
+		String sqlStatement = String.format("SELECT * FROM employee_payroll WHERE name = '%s';",name);
+		List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
+				
+		try (Connection connection = getConnection();){
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(sqlStatement);
+			employeePayrollList = this.getEmployeePayrollData(resultSet);
+		}
+		catch(SQLException e){
+			e.printStackTrace();
+		}
+		return employeePayrollList;
 	}
 	
 
