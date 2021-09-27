@@ -16,13 +16,23 @@ public class EmployeePayrollService {
 	}
 	private List<EmployeePayrollData> employeePayrollList;
 	
-	public EmployeePayrollService() {
-	}
-	
+	private EmployeePayrollDBService employeePayrollDBService;
 	public EmployeePayrollService(List<EmployeePayrollData> employeePayrollList)
 	{
 		this.employeePayrollList = employeePayrollList;
 	}
+	
+	public EmployeePayrollService() {
+		employeePayrollDBService =  EmployeePayrollDBService.getInstance();
+	}
+	
+	private EmployeePayrollData getEmployeePayrollData(String name) {
+			
+			return this.employeePayrollList.stream()
+					.filter(EmployeePayrollDataItem -> EmployeePayrollDataItem.employeeName.equals(name))
+					.findFirst()
+					.orElse(null);
+		}
 	
 	private void readEmployeePayrollData(Scanner consoleInputReader)
 	{
@@ -96,6 +106,27 @@ public class EmployeePayrollService {
 		}
 		
 	}
+	public void updateEmployeeSalaryUsingStatement(String name, double salary) throws SQLException {
+			
+			int result = employeePayrollDBService.updateEmployeeDataUsingStatement(name,salary);
+			if(result == 0) 
+				return;
+			
+			EmployeePayrollData employeePayrollData = this.getEmployeePayrollData(name);
+			if(employeePayrollData != null)
+				employeePayrollData.employeeSalary = salary;		
+		}
+	public boolean checkEmployeePayrollInSyncWithDB(String name) {
+			
+			List<EmployeePayrollData> employeePayrollDataList = employeePayrollDBService.getEmployeePayrollData(name);
+			return employeePayrollDataList.get(0).equals(getEmployeePayrollData(name));
+		}
+	public List<EmployeePayrollData> getEmployeeDetailsBasedOnName(IOService ioService, String name) {
+		if(ioService.equals(IOService.DB_IO))
+			this.employeePayrollList = employeePayrollDBService.getEmployeeDetailsBasedOnNameUsingStatement(name);
+		return this.employeePayrollList;
+	}
+	
 
 	
 }
