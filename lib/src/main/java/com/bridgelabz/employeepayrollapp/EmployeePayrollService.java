@@ -127,6 +127,4 @@ public class EmployeePayrollService {
 		return this.employeePayrollList;
 	}
 	
-
-	
 }
