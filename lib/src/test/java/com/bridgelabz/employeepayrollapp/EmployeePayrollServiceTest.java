@@ -49,7 +49,7 @@ public class EmployeePayrollServiceTest
 	{
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
-		employeePayrollService.updateEmployeeSalary("Terisa",3000000.00);
+		employeePayrollService.updateEmployeeSalary("Terisa",8000000.00);
 		
 	}
 		
