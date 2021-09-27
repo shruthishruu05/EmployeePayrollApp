@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.bridgelabz.employeepayrollapp.EmployeePayrollException.ExceptionType;
 import com.mysql.jdbc.Connection;
 import java.sql.*;
 
@@ -180,6 +181,104 @@ public class EmployeePayrollDBService {
 				e.printStackTrace();
 			}
 		}
+		
+		public List<Double> getSumOfSalaryBasedOnGenderUsingStatement() {
+			
+			String sqlStatement = "SELECT gender, SUM(salary) AS TotalSalary FROM employee_payroll GROUP BY gender;";
+			List<Double> sumOfSalaryBasedOnGender = new ArrayList<>();
+					
+			try (Connection connection = getConnection();){
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery(sqlStatement);
+				while(resultSet.next()) {
+					double salary = resultSet.getDouble("TotalSalary");
+					sumOfSalaryBasedOnGender.add(salary);
+				}
+			}
+			catch(SQLException e){
+				throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
+			}
+			return sumOfSalaryBasedOnGender;
+		}
+		
+		public List<Double> getAverageOfSalaryBasedOnGenderUsingStatement() {
+			
+			String sqlStatement = "SELECT gender, AVG(salary) AS AverageSalary FROM employee_payroll GROUP BY gender;";
+			List<Double> averageOfSalaryBasedOnGender = new ArrayList<>();
+					
+			try (Connection connection = getConnection();){
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery(sqlStatement);
+				while(resultSet.next()) {
+					double salary = resultSet.getDouble("AverageSalary");
+					averageOfSalaryBasedOnGender.add(salary);
+				}
+			}
+			catch(SQLException e){
+				throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
+			}
+			return averageOfSalaryBasedOnGender;
+		}
+		
+		public List<Double> getMinimumSalaryBasedOnGenderUsingStatement() {
+			
+			String sqlStatement = "SELECT gender, MIN(salary) AS MinimumSalary FROM employee_payroll GROUP BY gender;";
+			List<Double> MinimumSalaryBasedOnGender = new ArrayList<>();
+					
+			try (Connection connection = getConnection();){
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery(sqlStatement);
+				while(resultSet.next()) {
+					double salary = resultSet.getDouble("MinimumSalary");
+					MinimumSalaryBasedOnGender.add(salary);
+				}
+			}
+			catch(SQLException e){
+				throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
+
+			}
+			return MinimumSalaryBasedOnGender;
+		}
+		
+		public List<Double> getMaximumSalaryBasedOnGenderUsingStatement() {
+			
+			String sqlStatement = "SELECT gender, MAX(salary) AS MaximumSalary FROM employee_payroll GROUP BY gender;";
+			List<Double> MaximumSalaryBasedOnGender = new ArrayList<>();
+					
+			try (Connection connection = getConnection();){
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery(sqlStatement);
+				while(resultSet.next()) {
+					double salary = resultSet.getDouble("MaximumSalary");
+					MaximumSalaryBasedOnGender.add(salary);
+				}
+			}
+			catch(SQLException e){
+				throw new EmployeePayrollException(ExceptionType.CANNOT_EXECUTE_QUERY, "Could not Execute Query! Check the Syntax");
+
+			}
+			return MaximumSalaryBasedOnGender;
+		}
+
+		public List<Integer> getCountOfEmployeesBasedOnGenderUsingStatement() {
+			
+			String sqlStatement = "SELECT gender, COUNT(gender) AS CountBasedOnGender FROM employee_payroll GROUP BY gender;";
+			List<Integer> CountBasedOnGender = new ArrayList<>();
+					
+			try (Connection connection = getConnection();){
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery(sqlStatement);
+				while(resultSet.next()) {
+					int count = resultSet.getInt("CountBasedOnGender");
+					CountBasedOnGender.add(count);
+				}
+			}
+			catch(SQLException e){
+				e.printStackTrace();
+			}
+			return CountBasedOnGender;
+		}
+		
 		
 	
 	}
