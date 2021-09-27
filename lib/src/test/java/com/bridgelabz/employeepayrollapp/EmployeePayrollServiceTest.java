@@ -52,6 +52,22 @@ public class EmployeePayrollServiceTest
 		employeePayrollService.updateEmployeeSalary("Terisa",8000000.00);
 		
 	}
+	@Test
+	public void givenName_WhenFound_ShouldReturnEmployeeDetails() {
 		
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		String name = "Bill";
+		List<EmployeePayrollData> employeePayrollData = employeePayrollService.getEmployeeDetailsBasedOnName(IOService.DB_IO, name);
+		String resultName = employeePayrollData.get(0).employeeName;
+		Assert.assertEquals(name, resultName);
+	}
 	
+	@Test
+	public void givenStartDateRange_WhenMatches_ShouldReturnEmployeeDetails() {
+		
+		String startDate = "2018-01-03";
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		List<EmployeePayrollData> employeePayrollData = employeePayrollService.getEmployeeDetailsBasedOnStartDate(IOService.DB_IO, startDate);
+		Assert.assertEquals(3, employeePayrollData.size());
+	}
 }
