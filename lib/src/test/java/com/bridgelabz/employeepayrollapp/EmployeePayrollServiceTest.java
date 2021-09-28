@@ -90,7 +90,7 @@ public class EmployeePayrollServiceTest {
 		
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		Map<Character, Double> salaryMap = employeePayrollService.getGenderWiseTotalSalary(IOService.DB_IO);
-		Assert.assertEquals((double)salaryMap.get('F'),700000,0.0);
+		Assert.assertEquals((double)salaryMap.get('F'),500000,0.0);
 		Assert.assertEquals((double)salaryMap.get('M'),400000,0.0);
 	}
 	
@@ -98,7 +98,7 @@ public class EmployeePayrollServiceTest {
 	public void givenEmployeePayrollInDB_ShouldReturnMinSalaryBasedOnGender() {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		Map<Character, Double> salaryMap = employeePayrollService.getGenderWiseMinSalary(IOService.DB_IO);
-		Assert.assertEquals((double)salaryMap.get('F'),100000,0.0);
+		Assert.assertEquals((double)salaryMap.get('F'),500000,0.0);
 		Assert.assertEquals((double)salaryMap.get('M'),100000,0.0);
 		
 	}
@@ -107,7 +107,7 @@ public class EmployeePayrollServiceTest {
 	public void givenEmployeePayrollInDB_ShouldReturnAverageSalaryBasedOnGender() {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		Map<Character, Double> salaryMap = employeePayrollService.getGenderWiseAvgSalary(IOService.DB_IO);
-		Assert.assertEquals((double)salaryMap.get('F'),200000,0.0);
+		Assert.assertEquals((double)salaryMap.get('F'),500000,0.0);
 		Assert.assertEquals((double)salaryMap.get('M'),200000,0.0);
 		
 	}
