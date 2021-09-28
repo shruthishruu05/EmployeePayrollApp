@@ -2,138 +2,130 @@ package com.bridgelabz.employeepayrollapp;
 
 import static org.junit.Assert.*;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Test;
+
 import com.bridgelabz.employeepayrollapp.EmployeePayrollService.IOService;
 
 
-public class EmployeePayrollServiceTest 
-{
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+public class EmployeePayrollServiceTest {
+    int size = 3;
 	@Test
-	public void given3Employees_WhenWrittenToFile_ShouldMatchEmployeeEntries()
-	{
-		EmployeePayrollData[] arrayOfEmployees = {
-				new EmployeePayrollData(1, "Jeff Bezos", 100000.0),
-				new EmployeePayrollData(2, "Bill Gates", 200000.0),
-				new EmployeePayrollData(3, "Terisa", 1500000.0)
+	public void given3EmployeesWhenWrittenToFileShouldMatchEmployeeEntries() {
+		EmployeePayrollData[] arrayOfEmps = {
+				new EmployeePayrollData(1, "Jeff Bezos", 10000),
+				new EmployeePayrollData(2, "Bill Gates", 20000),
+				new EmployeePayrollData(3, "Mark Zuckerberg", 30000)
 		};
-		EmployeePayrollService employeePayrollService;
-		employeePayrollService = new EmployeePayrollService(Arrays.asList(arrayOfEmployees));
-		employeePayrollService.writeEmployeePayrollData(IOService.FILE_IO);
 		
+		EmployeePayrollService employeePayrollService;
+		employeePayrollService = new EmployeePayrollService(Arrays.asList(arrayOfEmps));
+		employeePayrollService.writeEmployeePayrollData(IOService.FILE_IO);
 		employeePayrollService.printData(IOService.FILE_IO);
 		long entries = employeePayrollService.countEntries(IOService.FILE_IO);
-		Assert.assertEquals(3, entries);
-		
+		Assert.assertEquals(3,entries);
 	}
 	
 	@Test
-	public void givenFile_WhenRead_ShouldReturnNumberOfEntries() {
+	public void givenFileOnReadingFromMatchEmployeeCount() {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		long entries = employeePayrollService.readDataFromFile(IOService.FILE_IO);
-		Assert.assertEquals(3, entries);
+		long entries = employeePayrollService.readEmployeePayrollData(IOService.FILE_IO);
+		Assert.assertEquals(3,entries);
 	}
 	
 	@Test
-	public void givenEmployeePayrollInDB_WhenRetrived_ShouldatchEmployeeCount() 
+	public void givenEmployeePayrollInDB_WhenRetrived_ShouldReturnEmployeeCount()
 	{
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
-		Assert.assertEquals(3, employeePayrollData.size());
+		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollDataDB(IOService.DB_IO);
+		Assert.assertEquals(size, employeePayrollData.size());
 	}
+
+	
+	@Test
+	public void givenListOfEmployees_WhenInserted_ShouldMatchEmployeeEntries() {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
+		String date = "16-08-2019";
+		LocalDate startDate = LocalDate.parse(date, formatter);
+		size += 1;
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService(new ArrayList<>()); 
+		employeePayrollService.addEmployeeToPayroll("sita",100000.00,startDate,'F' );
+		boolean result = employeePayrollService.checkEmployeePayrollInsyncWithDB("sita");
+		Assert.assertTrue(result);
+	}
+	
 	@Test
 	public void givenNewSalaryForEmpoyee_WhenUpdated_ShouldSyncWithDB()
 	{
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
-		employeePayrollService.updateEmployeeSalary("Terisa",8000000.00);
-		
-	}
-	@Test
-	public void givenName_WhenFound_ShouldReturnEmployeeDetails() {
-		
-		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		String name = "Bill";
-		List<EmployeePayrollData> employeePayrollData = employeePayrollService.getEmployeeDetailsBasedOnName(IOService.DB_IO, name);
-		String resultName = employeePayrollData.get(0).employeeName;
-		Assert.assertEquals(name, resultName);
+		List<EmployeePayrollData> employeePayrollData = employeePayrollService.readEmployeePayrollDataDB(IOService.DB_IO);
+		employeePayrollService.updateEmployeeSalary("Tanisha",500000.00);
+		boolean result = employeePayrollService.checkEmployeePayrollInsyncWithDB("Tanisha");
+		Assert.assertTrue(result);
 	}
 	
 	@Test
-	public void givenStartDateRange_WhenMatches_ShouldReturnEmployeeDetails() {
-		
-		String startDate = "2018-01-03";
+	public void givenDateRange_WhenQueried_ShouldReturnEmployeeList()
+	{
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		List<EmployeePayrollData> employeePayrollData = employeePayrollService.getEmployeeDetailsBasedOnStartDate(IOService.DB_IO, startDate);
-		Assert.assertEquals(3, employeePayrollData.size());
+		List<EmployeePayrollData> empList = employeePayrollService.getEmpInADateRange("2018-01-03","2020-07-07");
+		System.out.println(empList);
+		Assert.assertEquals(5, empList.size());
 	}
+	
 	@Test
 	public void givenEmployeePayrollInDB_ShouldReturnSumOfSalaryBasedOnGender() {
 		
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		List<Double> expectedSalarySum = new ArrayList();
-		expectedSalarySum.add(8000000.00);
-		expectedSalarySum.add(3000000.00);
-		List<Double> sumOfSalaryBasedOnGender = employeePayrollService.getSumOfSalaryBasedOnGender(IOService.DB_IO);
-		if(sumOfSalaryBasedOnGender.size() == 2) {
-			Assert.assertEquals(expectedSalarySum, sumOfSalaryBasedOnGender);
-		}
+		Map<Character, Double> salaryMap = employeePayrollService.getGenderWiseTotalSalary(IOService.DB_IO);
+		Assert.assertEquals((double)salaryMap.get('F'),700000,0.0);
+		Assert.assertEquals((double)salaryMap.get('M'),400000,0.0);
+	}
+	
+	@Test
+	public void givenEmployeePayrollInDB_ShouldReturnMinSalaryBasedOnGender() {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		Map<Character, Double> salaryMap = employeePayrollService.getGenderWiseMinSalary(IOService.DB_IO);
+		Assert.assertEquals((double)salaryMap.get('F'),100000,0.0);
+		Assert.assertEquals((double)salaryMap.get('M'),100000,0.0);
 		
 	}
 	
 	@Test
-	public void givenEmployeePayrollInDB_ShouldReturnAverageOfSalaryBasedOnGender() {
-		
+	public void givenEmployeePayrollInDB_ShouldReturnAverageSalaryBasedOnGender() {
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		List<Double> expectedSalaryAverage = new ArrayList();
-		expectedSalaryAverage.add(8000000.00);
-		expectedSalaryAverage.add(1500000.00);
-		List<Double> averageOfSalaryBasedOnGender = employeePayrollService.getAverageOfSalaryBasedOnGender(IOService.DB_IO);
-		if(averageOfSalaryBasedOnGender.size() == 2) {
-			Assert.assertEquals(expectedSalaryAverage, averageOfSalaryBasedOnGender);
-		}
-	}
-	
-	@Test
-	public void givenEmployeePayrollInDB_ShouldReturnMinimumSalaryBasedOnGender() {
+		Map<Character, Double> salaryMap = employeePayrollService.getGenderWiseAvgSalary(IOService.DB_IO);
+		Assert.assertEquals((double)salaryMap.get('F'),200000,0.0);
+		Assert.assertEquals((double)salaryMap.get('M'),200000,0.0);
 		
-		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		List<Double> expectedMinimumSalary = new ArrayList();
-		expectedMinimumSalary.add(8000000.00);
-		expectedMinimumSalary.add(1000000.00);
-		List<Double> minimumSalaryBasedOnGender = employeePayrollService.getMinimumSalaryBasedOnGender(IOService.DB_IO);
-		if(minimumSalaryBasedOnGender.size() == 2) {
-			Assert.assertEquals(expectedMinimumSalary, minimumSalaryBasedOnGender);
-		}
 	}
 	
 	@Test
 	public void givenEmployeePayrollInDB_ShouldReturnMaximumSalaryBasedOnGender() {
-		
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		List<Double> expectedMaximumSalary = new ArrayList();
-		expectedMaximumSalary.add(8000000.00);
-		expectedMaximumSalary.add(2000000.00);
-		List<Double> maximumSalaryBasedOnGender = employeePayrollService.getMaximumSalaryBasedOnGender(IOService.DB_IO);
-		if(maximumSalaryBasedOnGender.size() == 2) {
-			Assert.assertEquals(expectedMaximumSalary, maximumSalaryBasedOnGender);
-		}
+		Map<Character, Double> salaryMap = employeePayrollService.getGenderWiseMaxSalary(IOService.DB_IO);
+		Assert.assertEquals((double)salaryMap.get('F'),500000,0.0);
+		Assert.assertEquals((double)salaryMap.get('M'),300000,0.0);
+		
 	}
 	
 	@Test
 	public void givenEmployeePayrollInDB_ShouldReturnCountOfBasedOnGender() {
-		
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
-		List<Integer> expectedCountBasedOnGender = new ArrayList();
-		expectedCountBasedOnGender.add(1);
-		expectedCountBasedOnGender.add(2);
-		List<Integer> countBasedOnGender = employeePayrollService.getCountOfEmployeesBasedOnGender(IOService.DB_IO);
-		if(countBasedOnGender.size() == 2) {
-			Assert.assertEquals(expectedCountBasedOnGender, countBasedOnGender);
-		}
+		Map<Character, Integer> countMap = employeePayrollService.getGenderWiseCount(IOService.DB_IO);
+		Assert.assertEquals((int)countMap.get('F'),6);
+		Assert.assertEquals((int)countMap.get('M'),2);
+		
 	}
+	
 }
