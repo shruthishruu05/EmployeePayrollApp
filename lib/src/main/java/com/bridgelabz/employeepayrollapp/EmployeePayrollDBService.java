@@ -287,41 +287,73 @@ public class EmployeePayrollDBService {
 		return employeePayrollData;
 	}
 
-	public void addEmployeeToPayroll(String name,double salary, LocalDate startDate,  char gender) throws SQLException {
-        int employeeID = -1;
-        Connection connection = null;
-        connection = this.getConnection();
-        Statement statement = connection.createStatement();
-        try {
-            String sql = String.format("insert into employee_payroll(name,gender,salary,start) values" +"('%s','%s',%2f,CAST('%s' AS DATE))", name, startDate, salary, gender);
-            int rowAffected = statement.executeUpdate(sql, Statement.RETURN_GENERATED_KEYS);
-            if (rowAffected == 1) {
-
-                System.out.println(employeeID);
-                ResultSet resultSet = statement.getGeneratedKeys();
-                if (resultSet.next()) employeeID = resultSet.getInt(1);
-                System.out.println(employeeID);
-          }
-            countEntries();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        try {
-            double deductions = salary * 0.2;
-            double taxablePay = salary - deductions;
-            double tax = taxablePay * 0.1;
-            double netPay = salary - tax;
-            String sql = String.format("INSERT INTO payroll_details" +
-                   "(employee_id,basic_pay,deductions,taxable_pay,tax,net_pay) values"+"(%s,%s,%s,%s,%s,%s)",employeeID, salary,deductions, taxablePay, tax, netPay);
-            int rowAffected = statement.executeUpdate(sql);
-        }
-        catch (SQLException e){
-            e.printStackTrace();
-        }
-
-
-
-    }
-	
+	public EmployeePayrollData addEmployeeToPayroll(String name, Double salary, LocalDate startDate, char gender) {
+		int employeeID = -1;
+		EmployeePayrollData employeePayrollData = null;
+		Connection connection = null;
+		try {
+			connection = this.getConnection();
+			connection.setAutoCommit(false);
+		}
+		catch(Exception e) {
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.FAILED_TO_CONNECT, "couldn't establish connection");
+		}
+		
+		try (Statement statement = connection.createStatement();){
+			String sql = String.format("INSERT INTO employee_payroll(name,gender,salary,start)VALUES('%s','%s','%2f','%s')",name,gender,
+					salary,startDate.toString());
+			int result = statement.executeUpdate(sql,statement.RETURN_GENERATED_KEYS);
+			if(result == 1) {
+				ResultSet resultSet = statement.getGeneratedKeys();
+				if(resultSet.next()) employeeID = resultSet.getInt(1);
+			}
+		}
+		catch(SQLException e) {
+			try {
+				connection.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.CANNOT_EXECUTE_QUERY, "query execution failed");
+		}
+		
+		try(Statement statement = connection.createStatement();){
+			double deductions = salary * 0.2;
+			double taxablePay = salary - deductions;
+			double tax = taxablePay * 0.1;
+			double netPay = salary - tax;
+			String sql = String.format("INSERT INTO payroll_details(employee_id, basicPay, deductions, taxablePay, incomeTax, netPay)VALUES(%d,%2f,%2f,%2f,%2f,%2f)",
+					employeeID,salary,deductions,taxablePay,tax,netPay);
+			int result = statement.executeUpdate(sql);
+			if(result == 1) {
+				employeePayrollData = new EmployeePayrollData(employeeID, name, gender,salary, startDate);
+			}
+		}
+		catch(SQLException e) {
+			try {
+				connection.rollback();
+			} 
+			catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.CANNOT_EXECUTE_QUERY, "query execution failed");
+		}
+		try {
+			connection.commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally {
+			if(connection != null)
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+		}
+		return employeePayrollData;
+	}
+		
 }
 
