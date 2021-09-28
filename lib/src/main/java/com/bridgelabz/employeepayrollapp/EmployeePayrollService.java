@@ -144,5 +144,7 @@ public class EmployeePayrollService {
 	public int insertCompany(Company company) {
 		return employeePayrollDBService.insertCompany(company);
 	}
-	
+	public int deleteEmployee(String name) {
+		return employeePayrollDBService.deleteEmployee(name, this.employeePayrollList);
+	}
 }
