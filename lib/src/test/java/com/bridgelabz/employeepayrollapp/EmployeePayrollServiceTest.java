@@ -129,5 +129,17 @@ public class EmployeePayrollServiceTest {
 		Assert.assertEquals((int)countMap.get('M'),2);
 		
 	}
+	@Test
+	public void givenDepartment_WhenInserted_ShouldReturnOne(){
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		int result = employeePayrollService.insertDepartment(new Department( "D005","Marketing" ,"Mahesh"));
+		Assert.assertEquals(1,result);
+	}
+	@Test
+	public void givenCompany_WhenInserted_ShouldReturnOne(){
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		int result = employeePayrollService.insertCompany(new Company( "Ola",3));
+		Assert.assertEquals(1,result);
+	}
 	
 }
