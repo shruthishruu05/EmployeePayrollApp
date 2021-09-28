@@ -35,4 +35,10 @@ public class Department {
 		this.departmentId = departmentId;
 		this.hod = hod;
 	}
+
+	public Department(String departmentName) {
+		// TODO Auto-generated constructor stub
+		this.departmentName = departmentName;
+	}
+
 }
