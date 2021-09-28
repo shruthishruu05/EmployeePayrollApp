@@ -63,8 +63,9 @@ public class EmployeePayrollService {
 			new EmployeePayrollFileIOService().writeData(employeePayrollList);
 	}
 	
-	public void addEmployeeToPayroll(String name, Double salary, LocalDate startDate,char gender) {
-		employeePayrollList.add(employeePayrollDBService.addEmployeeToPayroll(name,salary,startDate,gender));
+	public void addEmployeeToPayroll(String name, double salary, LocalDate startDate,char gender) throws SQLException {
+		//employeePayrollList.addAll(employeePayrollDBService.addEmployeeToPayroll(name,salary,startDate,gender));
+		employeePayrollDBService.addEmployeeToPayroll(name,salary,startDate,gender);
 	}
 	
 	
@@ -137,5 +138,6 @@ public class EmployeePayrollService {
 			countMap = employeePayrollDBService.getGenderWiseCount();
 		return countMap;
 	}
+	
 	
 }
