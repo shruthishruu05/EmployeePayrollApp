@@ -2,6 +2,7 @@ package com.bridgelabz.employeepayrollapp;
 
 import static org.junit.Assert.*;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -53,8 +54,8 @@ public class EmployeePayrollServiceTest {
 
 	
 	@Test
-	public void givenListOfEmployees_WhenInserted_ShouldMatchEmployeeEntries() {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
+	public void givenListOfEmployees_WhenInserted_ShouldMatchEmployeeEntries() throws SQLException {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		String date = "16-08-2019";
 		LocalDate startDate = LocalDate.parse(date, formatter);
 		size += 1;
@@ -63,6 +64,7 @@ public class EmployeePayrollServiceTest {
 		boolean result = employeePayrollService.checkEmployeePayrollInsyncWithDB("sita");
 		Assert.assertTrue(result);
 	}
+
 	
 	@Test
 	public void givenNewSalaryForEmpoyee_WhenUpdated_ShouldSyncWithDB()
