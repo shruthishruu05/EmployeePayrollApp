@@ -374,6 +374,36 @@ public class EmployeePayrollDBService {
 			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.CANNOT_EXECUTE_QUERY, "query execution failed");
 		}
 		return set;
-	}	
+	}
+	
+	public int insertDepartment(Department dept) {
+		int result = 0;
+			String sql = String.format("INSERT INTO department(department_name,department_id,hod)VALUES('%s','%s','%s')",dept.getDepartmentId(),
+					dept.getDepartmentName(),dept.getHod());
+			try {
+				Connection connection = this.getConnection();
+				Statement statement = connection.createStatement();
+				result = statement.executeUpdate(sql);
+				connection.close();
+			}
+			catch(SQLException e) {
+				e.printStackTrace();
+			}
+		return result;
+	}
+	public int insertCompany(Company company) {
+		int result = 0;
+			String sql = String.format("INSERT INTO company(company_name,company_id)VALUES('%s',%d)",company.getCompanyName(),company.getCompanyId());
+			try {
+				Connection connection = this.getConnection();
+				Statement statement = connection.createStatement();
+				result = statement.executeUpdate(sql);
+				connection.close();
+			}
+			catch(SQLException e) {
+				e.printStackTrace();
+			}
+		return result;
+	}
 }
 
