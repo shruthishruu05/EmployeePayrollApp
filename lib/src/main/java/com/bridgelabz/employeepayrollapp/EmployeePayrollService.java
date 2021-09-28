@@ -138,6 +138,11 @@ public class EmployeePayrollService {
 			countMap = employeePayrollDBService.getGenderWiseCount();
 		return countMap;
 	}
-	
+	public int insertDepartment(Department dept) {
+		return employeePayrollDBService.insertDepartment(dept);
+	}
+	public int insertCompany(Company company) {
+		return employeePayrollDBService.insertCompany(company);
+	}
 	
 }
