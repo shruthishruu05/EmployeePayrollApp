@@ -1,6 +1,7 @@
 package com.bridgelabz.employeepayrollapp;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class EmployeePayrollData {
 	public int id;
@@ -8,6 +9,10 @@ public class EmployeePayrollData {
 	public char gender;
 	public double salary;
 	public LocalDate startDate;
+	public String phoneNumber;
+	public String address;
+	public Company company;
+	public List<Department> departments;
 	
 	public EmployeePayrollData(Integer id, String name, double salary) {
 		this.id = id;
@@ -18,6 +23,13 @@ public class EmployeePayrollData {
 		this(id,name,salary);
 		this.gender = gender;
 		this.startDate = startDate;
+	}
+	public EmployeePayrollData(Integer id, String name, char gender,  double salary, String address, String phoneNumber, LocalDate startDate, Company company, List<Department> departments) {
+		this(id,name,gender,salary,startDate);
+		this.address = address;
+		this.phoneNumber = phoneNumber;
+		this.company = company;
+		this.departments = departments;
 	}
 	@Override
 	public String toString() {
