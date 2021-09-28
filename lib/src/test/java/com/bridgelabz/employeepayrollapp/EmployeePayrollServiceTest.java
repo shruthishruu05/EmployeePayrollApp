@@ -141,5 +141,13 @@ public class EmployeePayrollServiceTest {
 		int result = employeePayrollService.insertCompany(new Company( "Ola",3));
 		Assert.assertEquals(1,result);
 	}
+	@Test
+	public void givenEmployeeName_WhenDeleted_ShouldBecomeInactive() {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService(new ArrayList<>()); 
+		employeePayrollService.readEmployeePayrollDataDB(IOService.DB_IO);
+		int result = employeePayrollService.deleteEmployee("Tanisha");
+		Assert.assertTrue(result>0);
+	}
+	
 	
 }
