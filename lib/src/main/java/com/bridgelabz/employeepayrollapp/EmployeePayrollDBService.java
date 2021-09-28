@@ -405,5 +405,24 @@ public class EmployeePayrollDBService {
 			}
 		return result;
 	}
+	public int deleteEmployee(String name, List<EmployeePayrollData> employeeList) {
+		int result = 0;
+		String sql = String.format("update employee set is_active = false where name = '%s'",name);
+		try(Connection connection = this.getConnection()){
+			Statement statement = connection.createStatement();
+			result = statement.executeUpdate(sql);
+			deleteEmployeeObject(name, employeeList);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new EmployeePayrollException(EmployeePayrollException.ExceptionType.CANNOT_EXECUTE_QUERY, "Cannot execute the query");
+		}
+		return result;
+	}
+	
+	private void deleteEmployeeObject(String name,List<EmployeePayrollData> employeeList) {
+		for(EmployeePayrollData employee : employeeList) {
+			if(employee.name.equals(name)) employeeList.remove(employee);
+		}
+	}
 }
 
