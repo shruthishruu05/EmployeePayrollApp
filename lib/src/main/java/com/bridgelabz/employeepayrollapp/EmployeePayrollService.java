@@ -14,7 +14,7 @@ import com.mysql.jdbc.Connection;
 public class EmployeePayrollService {
 	public enum IOService {CONSOLE_IO, FILE_IO, DB_IO, REST_IO};
 	public List<EmployeePayrollData> employeePayrollList;
-	private EmployeePayrollDBService employeePayrollDBService;
+	private static EmployeePayrollDBService employeePayrollDBService;
 	public EmployeePayrollService() {
 		employeePayrollDBService = EmployeePayrollDBService.getInstance();
 	}
@@ -63,9 +63,14 @@ public class EmployeePayrollService {
 			new EmployeePayrollFileIOService().writeData(employeePayrollList);
 	}
 	
-	public void addEmployeeToPayroll(String name, double salary, LocalDate startDate,char gender) throws SQLException {
+	public static void addEmployeeToPayroll(String name, double salary, LocalDate startDate,char gender) throws SQLException {
 		//employeePayrollList.addAll(employeePayrollDBService.addEmployeeToPayroll(name,salary,startDate,gender));
-		employeePayrollDBService.addEmployeeToPayroll(name,salary,startDate,gender);
+		try {
+			employeePayrollDBService.addEmployeeToPayroll(name,salary,startDate,gender);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	
@@ -137,7 +142,5 @@ public class EmployeePayrollService {
 		if(type.equals(IOService.DB_IO))
 			countMap = employeePayrollDBService.getGenderWiseCount();
 		return countMap;
-	}
-	
-	
+	}	
 }
