@@ -53,16 +53,24 @@ public class EmployeePayrollServiceTest {
 	}
 
 	
+//	@Test
+//	public void givenListOfEmployees_WhenInserted_ShouldMatchEmployeeEntries() throws SQLException {
+//		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//		String date = "16/08/2019";
+//		LocalDate startDate = LocalDate.parse(date, formatter);
+//		size += 1;
+//		EmployeePayrollService employeePayrollService = new EmployeePayrollService(new ArrayList<>()); 
+//		employeePayrollService.addEmployeeToPayroll("sita",100000.00,startDate,'F' );
+//		boolean result = employeePayrollService.checkEmployeePayrollInsyncWithDB("sita");
+//		Assert.assertTrue(result);
+//	}
 	@Test
-	public void givenListOfEmployees_WhenInserted_ShouldMatchEmployeeEntries() throws SQLException {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-		String date = "16-08-2019";
-		LocalDate startDate = LocalDate.parse(date, formatter);
-		size += 1;
-		EmployeePayrollService employeePayrollService = new EmployeePayrollService(new ArrayList<>()); 
-		employeePayrollService.addEmployeeToPayroll("sita",100000.00,startDate,'F' );
-		boolean result = employeePayrollService.checkEmployeePayrollInsyncWithDB("sita");
-		Assert.assertTrue(result);
+	public void givenNewEmployee_WhenAdded_ShouldSynWithDB() throws SQLException {
+		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
+		employeePayrollService.readEmployeePayrollData(IOService.DB_IO);
+		EmployeePayrollService.addEmployeeToPayroll("Mark", 5000000.00, LocalDate.now(),'M');
+		boolean reuslt = employeePayrollService.checkEmployeePayrollInsyncWithDB("Mark");
+		Assert.assertTrue(reuslt);
 	}
 
 	
